@@ -4,6 +4,7 @@ use std::io::ErrorKind;
 
 use diesel::prelude::*;
 use diesel::insert_into;
+use diesel::{OptionalExtension};
 use rocket_contrib::json::{Json, JsonValue};
 
 use self::models::*;
@@ -32,10 +33,16 @@ fn short_route(url: String) -> JsonValue {
 #[get("/<url>")]
 fn redirect_route(url: String) -> JsonValue {
     let connection = &mut db::establish_connection();
-    let original: String = urls.filter(shorted_url.eq(url.as_str())).select(original_url)
+    let original: Option<String> = urls.filter(shorted_url.eq(url.as_str()))
+        .select(original_url)
         .first(connection)
-        .expect("Error loading urls");
-    json!({"original_url": original})
+        .ok();
+
+    if !original.is_none() {
+        json!({"original_url": original})
+    } else {
+        json!({"error": "not found"})
+    }
 }
 
 fn rocket() -> rocket::Rocket {
