@@ -7,8 +7,6 @@
 
 ### Run
 
-```cargo build```
-
 ```cargo run```
 
 #### rustc-nightly is required.
