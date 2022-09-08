@@ -1,0 +1,6 @@
+CREATE TABLE urls (
+  id INTEGER PRIMARY KEY,
+  original_url VARCHAR NOT NULL,
+  shorted_url VARCHAR NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
