@@ -61,8 +61,7 @@ fn redirect_route(url: String) -> Result<Redirect, JsonValue> {
         .ok();
 
     if !original.is_none() {
-        Ok(Redirect::to(original.expect("none").to_string())
-        )
+        Ok(Redirect::to(original.expect("none").to_string()))
     } else {
         Err(json!({"error": "not found"}))
     }
