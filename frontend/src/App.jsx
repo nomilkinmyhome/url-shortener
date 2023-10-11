@@ -22,7 +22,7 @@ function App() {
         <h2>URL Shortener</h2>
         <div className="container">
             <form>
-                <input type="text" placeholder="Enter URL" value={ urlInput } onChange={ setUrlInput.target.value } />
+                <input type="text" placeholder="Enter URL" value={ urlInput } onChange={(event) => setUrlInput(event.target.value) } />
                 <button onClick={ submitHandler }>Short!</button>
             </form>
             { shortedURL ? <a href={ shortedURL }>{ shortedURL }</a> : "" }
