@@ -6,6 +6,12 @@ use diesel::prelude::*;
 use diesel::insert_into;
 use diesel::{OptionalExtension};
 use rocket_contrib::json::{Json, JsonValue};
+use rocket::http::Header;
+use rocket::{Request, Response};
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::response::Redirect;
+
+pub struct CORS;
 
 use self::models::*;
 use self::schema::urls::dsl::*;
@@ -18,6 +24,22 @@ mod services;
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
+
+impl Fairing for CORS {
+    fn info(&self) -> Info {
+        Info {
+            name: "Add CORS headers to responses",
+            kind: Kind::Response
+        }
+    }
+
+    fn on_response(&self, request: &Request, response: &mut Response) {
+        response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
+        response.set_header(Header::new("Access-Control-Allow-Methods", "POST, GET, PATCH, OPTIONS"));
+        response.set_header(Header::new("Access-Control-Allow-Headers", "*"));
+        response.set_header(Header::new("Access-Control-Allow-Credentials", "true"));
+    }
+}
 
 #[get("/?<url>")]
 fn short_route(url: String) -> JsonValue {
@@ -45,9 +67,11 @@ fn redirect_route(url: String) -> JsonValue {
     }
 }
 
+
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", routes![short_route, redirect_route])
+        .attach(CORS)
 }
 
 fn main() {
