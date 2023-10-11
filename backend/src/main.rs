@@ -53,7 +53,7 @@ fn short_route(url: String) -> JsonValue {
 }
 
 #[get("/<url>")]
-fn redirect_route(url: String) -> JsonValue {
+fn redirect_route(url: String) -> Result<Redirect, JsonValue> {
     let connection = &mut db::establish_connection();
     let original: Option<String> = urls.filter(shorted_url.eq(url.as_str()))
         .select(original_url)
@@ -61,9 +61,10 @@ fn redirect_route(url: String) -> JsonValue {
         .ok();
 
     if !original.is_none() {
-        json!({"original_url": original})
+        Ok(Redirect::to(original.expect("none").to_string())
+        )
     } else {
-        json!({"error": "not found"})
+        Err(json!({"error": "not found"}))
     }
 }
 
