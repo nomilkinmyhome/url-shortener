@@ -25,8 +25,7 @@ function App() {
                 <input type="text" placeholder="Enter URL" value={ urlInput } onChange={ setUrlInput.target.value } />
                 <button onClick={ submitHandler }>Short!</button>
             </form>
-            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-            { shortedURL ? <a href={shortedURL}></a> : "" }
+            { shortedURL ? <a href={ shortedURL }>{ shortedURL }</a> : "" }
         </div>
     </div>
   );
