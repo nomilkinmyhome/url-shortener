@@ -1,13 +1,10 @@
-# Simple URL shortener
+## URL Shortener
 
-### Backend endpoints
+### TL;DR
 
-1. ```/?url=http://example.com/``` - generates and returns short-link.
-2. ```/<short_link>``` - returns original URL for redirecting.
+![project](image.png)
 
-### Run
+### About project
 
-```cargo run```
-
-#### rustc-nightly is required.
-
+Backend based on the Rust with Rocket library, frontend uses React.<br />
+You can find instructions for running in the folders "backend" and "frontent" obviously.
